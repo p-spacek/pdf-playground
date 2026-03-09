@@ -403,7 +403,7 @@ PdfFile {
                 const cells = subFields
                   .map((sf) => {
                     const cellField = buildCellField(item[sf.name], sf, item)
-                    return `<td>${renderFieldValue(cellField)}</td>`
+                    return `<td>${renderFieldValue(cellField, item.id)}</td>`
                   })
                   .join('')
                 return `<tr>${cells}</tr>`
@@ -418,7 +418,7 @@ PdfFile {
                 .map((sf) => {
                   const cellField = buildCellField(item[sf.name], sf, item)
                   const label = sf.label || sf.name
-                  return `<div class="array-card-row"><span class="array-card-label">${label}</span><span class="array-card-value">${renderFieldValue(cellField)}</span></div>`
+                  return `<div class="array-card-row"><span class="array-card-label">${label}</span><span class="array-card-value">${renderFieldValue(cellField, item.id)}</span></div>`
                 })
                 .join('')
               return `<div class="array-card"><div class="array-card-title">${title}</div>${rows}</div>`
@@ -435,9 +435,14 @@ PdfFile {
           return field
         }
 
-        function renderFieldValue(field) {
-          const fieldFiles = filesByFieldName[field.name]
-          if (fieldFiles && fieldFiles.length > 0) return renderFileField(fieldFiles)
+        function renderFieldValue(field, subRecordId) {
+          let fieldFiles = filesByFieldName[field.name]
+          if (fieldFiles && fieldFiles.length > 0) {
+            if (subRecordId != null) {
+              fieldFiles = fieldFiles.filter((f) => f.subRecordId === subRecordId)
+            }
+            if (fieldFiles.length > 0) return renderFileField(fieldFiles)
+          }
           switch (field.type) {
             case 'checkbox':
               return renderCheckboxValue(field)
@@ -457,6 +462,10 @@ PdfFile {
               return renderLocationValue(field)
             case 'array':
               return renderArrayValue(field)
+            case 'avatar':
+            case 'media':
+            case 'signature':
+              return '<span class="null">None</span>'
             case 'text':
             case 'email':
             case 'phone':
@@ -741,6 +750,7 @@ PdfFile {
                     itemRating: 4,
                     itemProgress: 75,
                     itemLocation: '37.7749,-122.4194',
+                    itemPhoto: null,
                   },
                   {
                     id: '2',
@@ -764,6 +774,7 @@ PdfFile {
                     itemRating: null,
                     itemProgress: null,
                     itemLocation: null,
+                    itemPhoto: null,
                   },
                 ],
                 fields: [
@@ -799,15 +810,30 @@ PdfFile {
                     maximum: 100,
                   },
                   { type: 'location', name: 'itemLocation', label: 'Location' },
+                  { type: 'media', name: 'itemPhoto', label: 'Photo' },
                 ],
               },
             ],
           },
         ],
         files: [
-          { fileName: 'avatar.png', fieldName: 'profilePhoto', thumbnail: 'iVBORw0KGgo=' },
+          {
+            fileName: 'avatar.png',
+            fieldName: 'profilePhoto',
+            localPath: 'https://images.jigx.com/jigxforms/jigx-forms-horizontal-light.svg',
+          },
           { fileName: 'report.pdf', fieldName: 'attachments' },
-          { fileName: 'signature.png', fieldName: 'signature', localPath: '/tmp/sig.png' },
+          {
+            fileName: 'signature.png',
+            fieldName: 'signature',
+            localPath: 'https://images.jigx.com/jigxforms/jigx-forms-horizontal-light.svg',
+          },
+          {
+            fileName: 'item-photo.png',
+            fieldName: 'itemPhoto',
+            subRecordId: '1',
+            localPath: 'https://images.jigx.com/jigxforms/jigx-forms-horizontal-light.svg',
+          },
         ],
       }
 

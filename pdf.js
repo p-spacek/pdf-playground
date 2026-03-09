@@ -1,6 +1,6 @@
 /**
  * Generates a PDF HTML template with form data.
- * NOTE: index.html (playground) inlines a copy of this function — update it when changing this file.
+ * NOTE: pdf-playground.html inlines a copy of this function — update it when changing this file.
  * @param {{
  *   title: string,
  *   description?: string,
@@ -9,7 +9,7 @@
  *     title: string,
  *     children: Array<FieldDescriptor | Section>
  *   }>,
- *   files?: Array<{ fileName: string, createdAt?: string, fieldName?: string, localPath?: string, thumbnail?: string }>
+ *   files?: Array<{ fileName: string, createdAt?: string, fieldName?: string, subRecordId?: string, localPath?: string, thumbnail?: string }>
  * }} data - FieldDescriptor may include `maxColumns` (number) on array fields to control table-vs-card threshold (default 6)
  * @returns {string} HTML string for PDF generation
  */
@@ -168,7 +168,7 @@ export function create(data) {
           const cells = subFields
             .map((sf) => {
               const cellField = buildCellField(item[sf.name], sf, item)
-              return `<td>${renderFieldValue(cellField)}</td>`
+              return `<td>${renderFieldValue(cellField, item.id)}</td>`
             })
             .join('')
           return `<tr>${cells}</tr>`
@@ -185,7 +185,7 @@ export function create(data) {
           .map((sf) => {
             const cellField = buildCellField(item[sf.name], sf, item)
             const label = sf.label || sf.name
-            return `<div class="array-card-row"><span class="array-card-label">${label}</span><span class="array-card-value">${renderFieldValue(cellField)}</span></div>`
+            return `<div class="array-card-row"><span class="array-card-label">${label}</span><span class="array-card-value">${renderFieldValue(cellField, item.id)}</span></div>`
           })
           .join('')
         return `<div class="array-card"><div class="array-card-title">${title}</div>${rows}</div>`
@@ -211,12 +211,20 @@ export function create(data) {
 
   /**
    * Renders a field value by checking file-based fields first, then dispatching by type.
+   * @param {object} field - Field descriptor
+   * @param {string} [subRecordId] - Array item id to scope file lookup within array fields
    */
-  function renderFieldValue(field) {
+  function renderFieldValue(field, subRecordId) {
     // Check for file-based fields (avatar, media, signature)
-    const fieldFiles = filesByFieldName[field.name]
+    let fieldFiles = filesByFieldName[field.name]
     if (fieldFiles && fieldFiles.length > 0) {
-      return renderFileField(fieldFiles)
+      // When rendering inside an array item, filter files by subRecordId
+      if (subRecordId != null) {
+        fieldFiles = fieldFiles.filter((f) => f.subRecordId === subRecordId)
+      }
+      if (fieldFiles.length > 0) {
+        return renderFileField(fieldFiles)
+      }
     }
 
     switch (field.type) {
@@ -238,6 +246,11 @@ export function create(data) {
         return renderLocationValue(field)
       case 'array':
         return renderArrayValue(field)
+      case 'avatar':
+      case 'media':
+      case 'signature':
+        // File-based fields: if no matching files found above, show None
+        return '<span class="null">None</span>'
       case 'text':
       case 'email':
       case 'phone':

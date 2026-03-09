@@ -19,6 +19,7 @@ export interface PdfFile {
   fileName: string
   createdAt?: string
   fieldName?: string
+  subRecordId?: string
   localPath?: string
   thumbnail?: string
 }
