@@ -53,6 +53,22 @@
         background: #45475a;
       }
 
+      .btn-link {
+        padding: 6px 14px;
+        border: 1px solid #45475a;
+        border-radius: 6px;
+        background: #313244;
+        color: #cdd6f4;
+        font-size: 12px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.15s;
+      }
+
+      .btn-link:hover {
+        background: #45475a;
+      }
+
       .schema-ref {
         position: relative;
       }
@@ -231,6 +247,8 @@ PdfFile {
 }</pre
         >
       </details>
+      <a class="btn-link" href="pdf.js" download="pdf.js">pdf.js</a>
+      <a class="btn-link" href="pdf.d.ts" download="pdf.d.ts">pdf.d.ts</a>
       <button id="btnFormat">Format JSON</button>
       <button id="btnCopy">Copy HTML</button>
       <button class="primary" id="btnGenerate">Generate</button>
