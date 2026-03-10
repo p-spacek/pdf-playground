@@ -5,6 +5,7 @@
  *   title: string,
  *   description?: string,
  *   submittedAt?: string,
+ *   submittedBy?: string,
  *   sections: Array<{
  *     title: string,
  *     children: Array<FieldDescriptor | Section>
