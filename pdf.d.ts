@@ -34,6 +34,7 @@ export interface PdfData {
   title?: unknown
   description?: unknown
   submittedAt?: string
+  submittedBy?: string
   sections?: PdfSection[]
   files?: unknown
 }

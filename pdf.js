@@ -385,10 +385,10 @@ export function create(data) {
       color: #666;
       margin: 6px 0 0 0;
     }
-    .submitted-at {
-      font-size: 12px;
-      color: #999;
-      margin: 4px 0 0 0;
+    .submission-info {
+      font-size: 14px;
+      color: #666;
+      margin: 6px 0 0 0;
     }
     .section {
       margin-bottom: 32px;
@@ -533,7 +533,7 @@ export function create(data) {
     <div class="header-content">
       <h1>${data?.title || 'Form'}</h1>
       ${data?.description ? `<p class="description">${data.description}</p>` : ''}
-      ${data?.submittedAt ? `<p class="submitted-at">Submitted ${data.submittedAt}</p>` : ''}
+      ${data?.submittedBy || data?.submittedAt ? `<div class="submission-info">${data.submittedBy ? `<span>Submitted by <strong>${data.submittedBy}</strong></span> ` : ''}${data.submittedAt ? `<span>at <strong>${data.submittedAt}</strong></span>` : ''}</div>` : ''}
     </div>
     <img class="logo" src="https://images.jigx.com/jigxforms/jigx-forms-horizontal-light.svg" alt="Jigx Forms" />
   </div>
