@@ -585,7 +585,7 @@ PdfFile {
     <div class="header-content">
       <h1>${data?.title || 'Form'}</h1>
       ${data?.description ? `<p class="description">${data.description}</p>` : ''}
-      ${data?.submittedBy || data?.submittedAt ? `<div class="submission-info">${data.submittedBy ? `<span>Submitted by <strong>${data.submittedBy}</strong></span> ` : ''}${data.submittedAt ? `<span>at <strong>${data.submittedAt}</strong></span>` : ''}</div>` : ''}
+      ${data?.submittedBy || data?.submittedAt ? `<div class="submission-info">${data.submittedBy ? `<span>Submitted by <strong>${data.submittedBy}</strong></span> ` : ''}${data.submittedAt ? `<span>at <strong>${formatDateValue(data.submittedAt, 'datetime')}</strong></span>` : ''}</div>` : ''}
     </div>
     <img class="logo" src="https://images.jigx.com/jigxforms/jigx-forms-horizontal-light.svg" alt="Jigx Forms" />
   </div>
@@ -600,7 +600,7 @@ PdfFile {
       const DEFAULT_DATA = {
         title: 'Field Showcase',
         description: 'A comprehensive test form showcasing all available field types',
-        submittedAt: '2026-03-06 12:00',
+        submittedAt: '2026-03-06T12:00:00.000Z',
         submittedBy: 'Alice Johnson',
         sections: [
           {

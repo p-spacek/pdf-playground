@@ -534,7 +534,7 @@ export function create(data) {
     <div class="header-content">
       <h1>${data?.title || 'Form'}</h1>
       ${data?.description ? `<p class="description">${data.description}</p>` : ''}
-      ${data?.submittedBy || data?.submittedAt ? `<div class="submission-info">${data.submittedBy ? `<span>Submitted by <strong>${data.submittedBy}</strong></span> ` : ''}${data.submittedAt ? `<span>at <strong>${data.submittedAt}</strong></span>` : ''}</div>` : ''}
+      ${data?.submittedBy || data?.submittedAt ? `<div class="submission-info">${data.submittedBy ? `<span>Submitted by <strong>${data.submittedBy}</strong></span> ` : ''}${data.submittedAt ? `<span>at <strong>${formatDateValue(data.submittedAt, 'datetime')}</strong></span>` : ''}</div>` : ''}
     </div>
     <img class="logo" src="https://images.jigx.com/jigxforms/jigx-forms-horizontal-light.svg" alt="Jigx Forms" />
   </div>
